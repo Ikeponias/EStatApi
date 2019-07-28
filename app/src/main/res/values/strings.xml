@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">EStatApi</string>
+    <string name="resultLabel">検索結果</string>
+</resources>
