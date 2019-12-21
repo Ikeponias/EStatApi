@@ -17,21 +17,20 @@ class ApiTask(): AsyncTask<String, String, String?>(){
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun doInBackground(vararg params: String?): String? {
-        //ここでAPIを叩きます。バックグラウンドで処理する内容です。
+        // ここでAPIを叩く
         var connection: HttpURLConnection? = null
         var reader: BufferedReader? = null
         val buffer: StringBuffer
 
         try {
-            //param[0]にはAPIのURI(String)を入れます(後ほど)。
-            //AsynkTask<...>の一つめがStringな理由はURIをStringで指定するからです。
+            // param[0]にはAPIのURI(String)を入れる
+            // AsynkTask<...>の一つめがStringなのはURIをStringで指定するから
             val url = URL(params[0])
             connection = url.openConnection() as HttpURLConnection
-            connection.connect()  //ここで指定したAPIを叩いてみてます。
+            connection.connect()
 
-            //ここから叩いたAPIから帰ってきたデータを使えるよう処理していきます。
 
-            //とりあえず取得した文字をbufferに。
+            // 取得した文字をbufferに
             val stream = connection.inputStream
             reader = BufferedReader(InputStreamReader(stream))
             buffer = StringBuffer()
@@ -45,10 +44,10 @@ class ApiTask(): AsyncTask<String, String, String?>(){
                 //Log.d("CHECK", buffer.toString())
             }
 
-            //先ほどbufferに入れた、取得した文字列
+            // 先ほどbufferに入れた、取得した文字列
             return buffer.toString()
 
-            //ここから下は、接続エラーとかJSONのエラーとかで失敗した時にエラーを処理する為のものです。
+            // ここから下は、接続エラーとかJSONのエラーとかで失敗した時にエラーを処理するため。
         } catch (e: MalformedURLException) {
             e.printStackTrace()
         } catch (e: IOException) {
@@ -56,7 +55,7 @@ class ApiTask(): AsyncTask<String, String, String?>(){
         } catch (e: JSONException) {
             e.printStackTrace()
         }
-        // 接続を切断。
+        // 接続を切断
         finally {
             connection?.disconnect()
             try {
@@ -69,7 +68,7 @@ class ApiTask(): AsyncTask<String, String, String?>(){
     }
 
 
-    //返ってきたデータをビューに反映させる処理はonPostExecuteに書きます。これはメインスレッドです。
+    // 返ってきたデータをビューに反映させる処理はonPostExecuteに書く。
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
         if(result == null) return
